@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { TitleCasePipe } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 import { Article } from '../../models/article';
+import { TruncatePipe } from '../../pipes/truncate.pipe';
 
 /** Presentational component: displays a single article and a Save/Remove button. */
 @Component({
   selector: 'app-article-card',
-  imports: [],
+  imports: [TitleCasePipe, TruncatePipe],
   templateUrl: './article-card.html',
   styleUrl: './article-card.css',
 })
 export class ArticleCard {
-  // TODO (Task 4a): required input `article` of type `Article`.
-  // TODO (Task 4b): input `saved` of type boolean, defaults to `false`.
-  // TODO (Task 4c): output `saveToggled` that emits the `Article` when the button is clicked.
+  readonly article = input.required<Article>();
+  readonly saved = input(false);
+  readonly saveToggled = output<Article>();
 }

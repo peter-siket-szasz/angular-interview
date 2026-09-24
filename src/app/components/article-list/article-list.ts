@@ -1,17 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Article } from '../../models/article';
+import { ArticleService } from '../../services/article.service';
+import { ReadingListService } from '../../services/reading-list.service';
+import { ArticleCard } from '../article-card/article-card';
 
 /** Smart/container component: loads the articles and connects them to the reading list. */
 @Component({
   selector: 'app-article-list',
-  imports: [],
+  imports: [ArticleCard],
   templateUrl: './article-list.html',
   styleUrl: './article-list.css',
 })
 export class ArticleList {
-  // TODO (Task 5a): inject `ArticleService` and `ReadingListService`.
-  // TODO (Task 5b): load the articles via `ArticleService` and keep them in a signal.
-  //   Hint: don't subscribe manually in the constructor or `ngOnInit`. Use `toSignal()` from
-  //   '@angular/core/rxjs-interop' to turn the Observable into a signal. It subscribes and
-  //   unsubscribes for you, and its value is `undefined` until the data has arrived.
-  // TODO (Task 5d): when a card emits `saveToggled`, toggle that article in the reading list.
+  private readonly articleService = inject(ArticleService);
+  protected readonly readingList = inject(ReadingListService);
+
+  /** `undefined` while the request is pending. */
+  protected readonly articles = toSignal(this.articleService.getArticles());
+
+  protected onSaveToggled(article: Article): void {
+    this.readingList.toggle(article.id);
+  }
 }
