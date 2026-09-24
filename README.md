@@ -79,25 +79,27 @@ Good to know about this Angular version:
 
 ## Tasks
 
-### Task 1: `truncate` pipe (about 4 min)
+### Task 1: `truncate` pipe
 
 File: [src/app/pipes/truncate.pipe.ts](src/app/pipes/truncate.pipe.ts)
 
-1. Turn the `TruncatePipe` class into a pipe named **`truncate`** that templates can use as
-   `{{ text | truncate: 100 }}`.
-2. Implement `transform(value, limit = 80)`:
-   - `null` / `undefined` returns `''`.
-   - Text with `length <= limit` is returned unchanged.
-   - Longer text is cut to the first `limit` characters. Trailing whitespace is removed and
-     a single ellipsis character **`…`** (U+2026) is appended.
+The pipe boilerplate (`@Pipe({ name: 'truncate' })`, `PipeTransform`) is already in place.
+Templates can use it as `{{ text | truncate: 100 }}`.
 
-   | Input                       | Limit | Output         |
-   | --------------------------- | ----- | -------------- |
-   | `'Hello'`                   | 10    | `'Hello'`      |
-   | `'Hello wonderful world'`   | 8     | `'Hello wo…'`  |
-   | `'Hello wonderful world'`   | 6     | `'Hello…'`     |
+Implement `transform(value, limit = 80)`:
 
-### Task 2: `ArticleService` (about 4 min)
+- `null` / `undefined` returns `''`.
+- Text with `length <= limit` is returned unchanged.
+- Longer text is cut to the first `limit` characters. Trailing whitespace is removed and
+  a single ellipsis character **`…`** (U+2026) is appended.
+
+| Input                     | Limit | Output        |
+| ------------------------- | ----- | ------------- |
+| `'Hello'`                 | 10    | `'Hello'`     |
+| `'Hello wonderful world'` | 8     | `'Hello wo…'` |
+| `'Hello wonderful world'` | 6     | `'Hello…'`    |
+
+### Task 2: `ArticleService`
 
 Files: [src/app/services/article.service.ts](src/app/services/article.service.ts),
 [src/app/app.config.ts](src/app/app.config.ts)
@@ -107,22 +109,26 @@ Files: [src/app/services/article.service.ts](src/app/services/article.service.ts
    `GET https://jsonplaceholder.typicode.com/posts?_limit=12` (use the exported `API_URL`) and
    returns the response as `Observable<Article[]>`.
 
-### Task 3: `ReadingListService` (about 6 min)
+### Task 3: `ReadingListService`
 
 File: [src/app/services/reading-list.service.ts](src/app/services/reading-list.service.ts)
 
-Manage the reading list with **signals**:
+The reading list is managed with **signals**. The signals are already declared:
 
-1. Store the saved article ids in a **private** writable signal. Expose them as the public
-   **read-only** signal `savedIds`.
-2. `count` is a signal derived from the saved ids.
-3. `isSaved(id)` returns whether the id is on the list.
-4. `toggle(id)` adds the id (at the end) if it is missing, otherwise removes it. Update the state
-   **immutably**.
+- `ids`: **private** writable signal with the saved article ids (the state)
+- `savedIds`: public **read-only** view of `ids`
+- `count`: `computed` signal derived from `ids`
+
+Your job is to implement the logic, working only with the private `ids` signal:
+
+1. **`count`**: return the number of saved ids.
+2. **`isSaved(id)`**: return `true` if the id is on the list.
+3. **`toggle(id)`**: add the id (at the end) if it is missing, otherwise remove it. Use
+   `this.ids.update(...)` and return a **new** array. Do not mutate the existing one.
 
 When this works, the "Saved: N" badge in the header updates automatically.
 
-### Task 4: `ArticleCard` component (about 7 min)
+### Task 4: `ArticleCard` component
 
 Files: [article-card.ts](src/app/components/article-card/article-card.ts),
 [article-card.html](src/app/components/article-card/article-card.html)
@@ -140,7 +146,7 @@ actions through an output. It must not inject any service.
    - button label is `Save` or `Remove`, depending on `saved`
    - the `<article>` element gets the CSS class **`saved`** while the article is saved
 
-### Task 5: `ArticleList` component (about 9 min)
+### Task 5: `ArticleList` component
 
 Files: [article-list.ts](src/app/components/article-list/article-list.ts),
 [article-list.html](src/app/components/article-list/article-list.html)
@@ -149,6 +155,9 @@ This is the **smart/container** component that connects services and the UI.
 
 1. Inject `ArticleService` and `ReadingListService`.
 2. Load the articles through `ArticleService` and keep them in a signal.
+   Use `toSignal()`
+   from `@angular/core/rxjs-interop` rather than subscribing manually in the constructor or in
+   `ngOnInit`. The signal's value is `undefined` until the data has arrived.
 3. Template (keep the existing `data-testid` attributes):
    - while loading, show **only** the `loading` paragraph
    - when loaded, render one `<app-article-card>` per article inside the `list` section.
