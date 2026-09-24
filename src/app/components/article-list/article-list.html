@@ -1,0 +1,15 @@
+<!--
+  TODO (Task 5c): render the list. Keep the data-testid attributes, the tests rely on them.
+  - While the articles are loading, show ONLY the "loading" paragraph.
+  - Once loaded, render one <app-article-card> per article inside the <section>
+    (use the built-in control flow with a meaningful `track` expression)
+    and pass `article` and `saved` to each card.
+  - If the API returns an empty list, show the "empty" paragraph instead of any cards.
+-->
+<p class="state" data-testid="loading">Loading articles…</p>
+
+<section class="grid" data-testid="list">
+  <!-- one <app-article-card> per article -->
+</section>
+
+<p class="state" data-testid="empty">No articles found.</p>

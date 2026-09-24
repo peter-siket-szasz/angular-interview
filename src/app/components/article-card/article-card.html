@@ -1,0 +1,12 @@
+<!--
+  TODO (Task 4d): bind the data. Keep the data-testid attributes, the tests rely on them.
+  - title:  the article title, formatted with Angular's built-in `titlecase` pipe
+  - body:   the article body, shortened to 100 characters with your `truncate` pipe
+  - button: label "Save" when not saved, "Remove" when saved; a click emits `saveToggled`
+  - the <article> element has the CSS class `saved` while the article is saved
+-->
+<article class="card">
+  <h3 class="card__title" data-testid="title">Article title</h3>
+  <p class="card__body" data-testid="body">Article body</p>
+  <button type="button" class="card__button" data-testid="toggle">Save</button>
+</article>
