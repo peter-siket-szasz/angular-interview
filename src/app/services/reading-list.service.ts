@@ -1,4 +1,4 @@
-import { Injectable, Signal, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 /** Keeps track of the articles the user saved to their reading list. */
 @Injectable({ providedIn: 'root' })

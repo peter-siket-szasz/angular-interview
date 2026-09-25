@@ -95,11 +95,15 @@ toggle(id: number): void {
 }
 ```
 
-`ids`, `savedIds` and `count` are declared in the starter, and `toggle` has a
-`this.ids.update(...)` hint. The candidate implements `count`, `isSaved` and `toggle`.
+`ids` and `savedIds` are declared in the starter, and `toggle` has a `this.ids.update(...)` hint.
+`count` is only a `signal(0)` placeholder. The README just says it must "always match `ids`" and
+does **not** mention `computed`, so the candidate has to come up with it.
 
-- Good: reads `ids()` inside `computed`, returns a new array from `update`.
-- Watch for: `this.ids().push(id)` (mutation; the signal does not notify, and a test catches
+- Good: replaces the placeholder with `computed(() => this.ids().length)` without being told,
+  and returns a new array from `update`.
+- Watch for: keeping `count` as a writable signal and updating it by hand in `toggle`. The tests
+  still pass, but it duplicates state that can get out of sync, so ask why `computed` is better.
+  Also watch for `this.ids().push(id)` (mutation; the signal does not notify, and a test catches
   this), or `set` with a mutated array. Using `savedIds()` instead of `ids()` for reading is fine.
 - Ask: *Difference between `signal`, `computed` and `effect`? Why must the update be immutable?
   Why is `ids` private and exposed via `asReadonly()`? Why do all components see the same list?
