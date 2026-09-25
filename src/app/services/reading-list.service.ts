@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, Signal, signal } from '@angular/core';
 
 /** Keeps track of the articles the user saved to their reading list. */
 @Injectable({ providedIn: 'root' })
@@ -9,11 +9,8 @@ export class ReadingListService {
   /** Read-only view of the state for consumers. */
   readonly savedIds = this.ids.asReadonly();
 
-  /** Number of saved articles. */
-  readonly count = computed(() => {
-    // TODO (Task 3a): return the number of saved ids.
-    return 0;
-  });
+  // TODO (Task 3a): the number of saved articles. It must always match `ids`.
+  readonly count: Signal<number> = signal(0);
 
   /** Returns `true` if the article with the given id is on the reading list. */
   isSaved(id: number): boolean {
