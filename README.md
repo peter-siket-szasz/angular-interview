@@ -113,15 +113,14 @@ Files: [src/app/services/article.service.ts](src/app/services/article.service.ts
 
 File: [src/app/services/reading-list.service.ts](src/app/services/reading-list.service.ts)
 
-The reading list is managed with **signals**. The signals are already declared:
+The reading list is managed with **signals**. The state is already declared:
 
 - `ids`: **private** writable signal with the saved article ids (the state)
 - `savedIds`: public **read-only** view of `ids`
-- `count`: `computed` signal derived from `ids`
 
-Your job is to implement the logic, working only with the private `ids` signal:
+Your job is to implement the rest:
 
-1. **`count`**: return the number of saved ids.
+1. **`count`**: a signal with the number of saved articles. It must always match `ids`.
 2. **`isSaved(id)`**: return `true` if the id is on the list.
 3. **`toggle(id)`**: add the id (at the end) if it is missing, otherwise remove it. Use
    `this.ids.update(...)` and return a **new** array. Do not mutate the existing one.
